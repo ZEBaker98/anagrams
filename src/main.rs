@@ -13,6 +13,12 @@ enum InputError {
     MissingInput,
 }
 
+fn print_examples() {
+    println!("Examples:");
+    println!("\tcargo run --release -- alphabetize");
+    println!("\tcargo run --release -- blue???");
+}
+
 fn get_input() -> Result<String, InputError> {
     let mut args = env::args();
     match args.nth(1) {
@@ -43,10 +49,12 @@ fn main() {
             }
         },
         Err(InputError::MissingInput) => {
-            println!("Argument is missing! Anagrams input can contain alphabetic characters and ? as wildcard characters.")
+            println!("Argument is missing! Anagrams input can contain alphabetic characters and ? as wildcard characters.");
+            print_examples();
         },
         Err(InputError::InvalidInput(input)) => {
-            println!("Argument '{}' is invalid! Input can contain alphabetic characters and ? as wildcard characters.", input)
+            println!("Argument '{}' is invalid! Input can contain alphabetic characters and ? as wildcard characters.", input);
+            print_examples();
         }
     }
 }
