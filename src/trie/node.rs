@@ -9,14 +9,13 @@ use std::cell::{Cell, RefCell};
 use std::str::Chars;
 
 use deepsize::DeepSizeOf;
-use serde::{Serialize, Deserialize};
 
 type ChildNode = Option<Rc<RefCell<Node>>>;
 
-
-#[derive(Debug, Default, Serialize, Deserialize, DeepSizeOf)]
+// a node of the trie
+#[derive(Debug, Default, DeepSizeOf)]
 pub struct Node {
-  children: [ChildNode; 26],
+  children: [ChildNode; 26], // contains up to 26 children, one for each letter
   eow: Cell<bool>, // true if node is end of word
 }
 
@@ -25,6 +24,7 @@ impl Node {
     Node { children: Default::default(), eow: Cell::new(false) }
   }
 
+  // get a child node by char index
   pub fn get(&self, i: char) -> Result<Option<Rc<RefCell<Node>>>, TrieError> {
     match char_to_index(i) {
       Ok(index) => {
@@ -39,6 +39,7 @@ impl Node {
     }
   }
 
+  // get a child node by a char index or create it if it doesn't exist
   pub fn get_or_create(&mut self, i:char) -> Result<Rc<RefCell<Node>>, TrieError> {
     match char_to_index(i) {
       Ok(index) => {
@@ -57,6 +58,7 @@ impl Node {
     }
   }
 
+  // recursively ensure word is in trie
   pub fn insert(&mut self, mut word: Chars) -> Result<(), TrieError> {
     match word.next() {
       Some(letter) => {
@@ -75,6 +77,7 @@ impl Node {
     }
   }
 
+  // recursively determine if word is in trie
   pub fn find(&self, mut word: Chars) -> Result<bool, TrieError> {
     match word.next() {
       Some(letter) => {
@@ -94,6 +97,7 @@ impl Node {
     }
   }
 
+  // recursively generate all anagrams from a set of letters
   pub fn anagrams(&self, letters: Letters, prefix: String) -> Result<Vec<String>, TrieError> {
     let mut words: Vec<String> = Vec::new();
     if self.eow.get() {
@@ -119,6 +123,7 @@ impl Node {
     Ok(words)
   }
 
+  // recursively count child nodes
   pub fn node_count(&self) -> i32 {
     let mut nodes = 1;
     for child in &self.children {

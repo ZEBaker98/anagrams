@@ -7,4 +7,3 @@ edition = "2021"
 
 [dependencies]
 deepsize = "0.2.0"
-serde = { version = "1.0.144", features = ["derive", "rc"] }

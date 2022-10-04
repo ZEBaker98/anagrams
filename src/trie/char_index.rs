@@ -10,6 +10,7 @@ const LUT: [char; 26] = [
   'z',
 ];
 
+// Convert char to an index for an array
 pub fn char_to_index(i: char) -> Result<usize, TrieError> {
   if i.is_ascii_alphabetic() {
     Ok(i.to_ascii_lowercase() as usize - 'a' as usize)
@@ -18,6 +19,7 @@ pub fn char_to_index(i: char) -> Result<usize, TrieError> {
   }
 }
 
+// Convert integer index back to char
 pub fn index_to_char(i: usize) -> Result<char, TrieError> {
   if i < 26 {
     Ok(LUT[i])

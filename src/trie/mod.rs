@@ -1,4 +1,4 @@
-mod errors;
+pub mod errors;
 mod char_index;
 mod node;
 pub mod letters;
